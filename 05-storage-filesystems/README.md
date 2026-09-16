@@ -247,13 +247,17 @@ sudo snap remove <nome> --revision=<revisão>
 
 ---
 
-## 📸 9. Evidências
+### 📸 9. Evidências
 
-As evidências deste laboratório estão disponíveis no diretório `screenshots/`:
+As evidências deste laboratório estão disponíveis no diretório `screenshots/`.
 
-* 🖼️ `screenshots/exercicio-01-disco-e-filesystems.png`
-* 🖼️ `screenshots/exercicio-02-investigacao-uso-disco.png`
+#### 🖼️ Exercício 01 — Disco e Filesystems
 
+![Exercício 01 - Disco e Filesystems](screenshots/exercicio-01-disco-e-filesystems.png)
+
+#### 🖼️ Exercício 02 — Investigação do uso do disco
+
+![Exercício 02 - Investigação do uso do disco](screenshots/exercicio-02-investigacao-uso-disco.png)
 ```
 
 ```
