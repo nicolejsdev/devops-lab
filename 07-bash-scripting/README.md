@@ -22,24 +22,25 @@ echo "User: $(whoami)"
 echo "Date: $(date)"
 echo "Kernel: $(uname -r)"
 echo "Uptime: $(uptime -p)"
+```
 
-🔧 Permissão de execução
+###🔧 Permissão de execução
 
 Para permitir a execução do script, foi utilizado:
-
+```
 chmod +x /tmp/system-info.sh
+```
 
-▶️ Execução
+###▶️ Execução
 
 O script foi executado com:
-
+```
 /tmp/system-info.sh
+```
 
-📋 Resultado
+###📋 Resultado
 
 O script apresentou informações como:
-
-
 
 🖥️ Hostname da máquina
 
@@ -51,7 +52,7 @@ O script apresentou informações como:
 
 ⏱️ Tempo de atividade do sistema
 
-📚 O que aprendi
+###📚 O que aprendi
 
 Neste exercício, pratiquei os fundamentos básicos de criação e execução de scripts Bash.
 
@@ -63,13 +64,13 @@ Aprendi a:
 
 criar um script utilizando Bash;
 
-utilizar #!/bin/bash para definir o interpretador;
+utilizar ```#!/bin/bash``` para definir o interpretador;
 
-utilizar echo para exibir informações;
+utilizar ```echo``` para exibir informações;
 
-executar comandos dentro de $(...);
+executar comandos dentro de ```$(...)```;
 
-conceder permissão de execução com chmod +x;
+conceder permissão de execução com ```chmod +x```;
 
 executar um script pelo terminal.
 
@@ -77,7 +78,9 @@ executar um script pelo terminal.
 
 Também entendi como o Bash pode automatizar tarefas utilizando comandos que já fazem parte do sistema Linux.
 
-📸 Evidência
+### 📸 Evidência
 
-Screenshot: screenshots/exercicio-01-primeiro-script-bash.png
+**Screenshot:** `screenshots/exercicio-01-primeiro-script-bash.png`
+
+![Exercício 01 - Primeiro script Bash](screenshots/exercicio-01-primeiro-script-bash.png)
 
