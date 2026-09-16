@@ -31,14 +31,14 @@ Para permitir a execução do script, foi utilizado:
 chmod +x /tmp/system-info.sh
 ```
 
-###▶️ Execução
+### ▶️ Execução
 
 O script foi executado com:
 ```
 /tmp/system-info.sh
 ```
 
-###📋 Resultado
+### 📋 Resultado
 
 O script apresentou informações como:
 
@@ -52,16 +52,11 @@ O script apresentou informações como:
 
 ⏱️ Tempo de atividade do sistema
 
-###📚 O que aprendi
+### 📚 O que aprendi
 
 Neste exercício, pratiquei os fundamentos básicos de criação e execução de scripts Bash.
 
-
-
 Aprendi a:
-
-
-
 criar um script utilizando Bash;
 
 utilizar ```#!/bin/bash``` para definir o interpretador;
