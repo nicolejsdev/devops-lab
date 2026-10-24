@@ -1,16 +1,27 @@
+# 🐚 Bash Scripting
 
-
-# 🐚 07 - Bash Scripting
+Laboratório prático de **scripts Bash no Linux**: criação de um primeiro script que coleta e exibe informações do sistema usando comandos que já existem na máquina.
 
 ## 🎯 Objetivo
 
-Praticar a criação e execução de scripts Bash no Linux, utilizando comandos do sistema para coletar e exibir informações da máquina.
+Criar e executar um script Bash, praticando:
 
-## 🧪 Exercício 01 - Primeiro script Bash
+- shebang (`#!/bin/bash`) para definir o interpretador
+- exibição de texto com `echo`
+- substituição de comando com `$(...)`
+- permissão de execução com `chmod +x`
+- execução de um script pelo terminal
 
-### 💻 Script utilizado
+## 🧰 Ambiente
 
-Foi criado um script Bash para exibir informações básicas do sistema:
+- Distribuição: <!-- ex: Ubuntu 24.04 LTS -->
+- Shell: `bash`
+
+## 🛠️ Passo a passo
+
+### 1. Criar o script
+
+Arquivo `system-info.sh`:
 
 ```bash
 #!/bin/bash
@@ -24,58 +35,56 @@ echo "Kernel: $(uname -r)"
 echo "Uptime: $(uptime -p)"
 ```
 
-###🔧 Permissão de execução
+### 2. Dar permissão de execução
 
-Para permitir a execução do script, foi utilizado:
-```
+```bash
 chmod +x /tmp/system-info.sh
 ```
 
-### ▶️ Execução
+### 3. Executar
 
-O script foi executado com:
-```
+```bash
 /tmp/system-info.sh
 ```
 
-### 📋 Resultado
+Resultado esperado (exemplo, os valores mudam em cada máquina):
 
-O script apresentou informações como:
+```text
+===== SYSTEM INFORMATION =====
+Hostname: ubuntu
+User: <usuario>
+Date: <data e hora atuais>
+Kernel: <versão do kernel>
+Uptime: up <tempo de atividade>
+```
 
-🖥️ Hostname da máquina
+## 🔎 Como o script funciona
 
-👤 Usuário atual
+| Linha | O que faz |
+|-------|-----------|
+| `#!/bin/bash` | define que o script deve ser executado pelo Bash |
+| `echo "===== ... ====="` | imprime o cabeçalho |
+| `$(hostname)` | nome da máquina |
+| `$(whoami)` | usuário que executou o script |
+| `$(date)` | data e hora atuais |
+| `$(uname -r)` | versão do kernel |
+| `$(uptime -p)` | tempo de atividade em formato legível |
 
-📅 Data e horário
+## 🧠 Conceitos praticados
 
-🐧 Versão do kernel
+| Conceito | Descrição |
+|----------|-----------|
+| **Shebang** (`#!/bin/bash`) | primeira linha do script, indica qual interpretador executa o arquivo |
+| **Substituição de comando** (`$(...)`) | executa o comando dentro dos parênteses e insere a saída no lugar |
+| **Permissão de execução** (`chmod +x`) | sem ela, o arquivo é só texto e não pode ser rodado como programa |
 
-⏱️ Tempo de atividade do sistema
+## 📸 Evidência
 
-### 📚 O que aprendi
+![Primeiro script Bash](screenshots/exercicio-01-primeiro-script-bash.png)
 
-Neste exercício, pratiquei os fundamentos básicos de criação e execução de scripts Bash.
+## 🧠 Aprendizados
 
-Aprendi a:
-criar um script utilizando Bash;
-
-utilizar ```#!/bin/bash``` para definir o interpretador;
-
-utilizar ```echo``` para exibir informações;
-
-executar comandos dentro de ```$(...)```;
-
-conceder permissão de execução com ```chmod +x```;
-
-executar um script pelo terminal.
-
-
-
-Também entendi como o Bash pode automatizar tarefas utilizando comandos que já fazem parte do sistema Linux.
-
-### 📸 Evidência
-
-**Screenshot:** `screenshots/exercicio-01-primeiro-script-bash.png`
-
-![Exercício 01 - Primeiro script Bash](screenshots/exercicio-01-primeiro-script-bash.png)
-
+- Um script Bash é uma sequência de comandos do sistema salva em arquivo.
+- O shebang define quem interpreta o script, e o `chmod +x` permite executá-lo diretamente.
+- Com `$(...)`, a saída de um comando pode ser reaproveitada dentro de outro.
+- O Bash automatiza tarefas usando ferramentas que já fazem parte do Linux.
