@@ -1,263 +1,112 @@
-# 💾 05 - Storage & Filesystems
+# 💾 Storage & Filesystems
+
+Laboratório prático de **armazenamento no Linux**: discos, partições, sistemas de arquivos, pontos de montagem e investigação de consumo de espaço com `du`, incluindo limpeza controlada de arquivos grandes e de revisões antigas do Snap.
 
 ## 🎯 Objetivo
 
-Entender como o Linux organiza discos, partições, sistemas de arquivos e pontos de montagem.
+Entender como o Linux organiza discos, partições, sistemas de arquivos e pontos de montagem, e praticar **troubleshooting de armazenamento**: descobrir quais diretórios e arquivos estão consumindo mais espaço.
 
-O laboratório também teve como objetivo praticar *troubleshooting* de armazenamento, identificando quais diretórios e arquivos estavam consumindo mais espaço em disco.
+Comandos praticados:
 
----
+- `df`, `lsblk`, `findmnt` (visão geral do armazenamento)
+- `du` (investigação de consumo de espaço)
+- `snap list --all`, `snap remove` (revisões antigas de pacotes Snap)
 
-## 💡 Conceitos Praticados
+## 🧰 Ambiente
 
-- Uso de espaço em disco
-- Discos e partições
-- Sistemas de arquivos
-- Pontos de montagem
-- Investigação de uso de disco
-- Identificação de arquivos grandes
-- Limpeza controlada
-- Snap e revisões de pacotes
-- Troubleshooting de armazenamento
+- Distribuição: <!-- ex: Ubuntu 24.04 LTS -->
+- Filesystem raiz: `ext4`
+- Acesso: usuário com `sudo`
 
----
+## 🛠️ Passo a passo
 
-## 1. 🔍 Análise do Disco e Filesystem
+### 1. Visão geral do armazenamento
 
-Foram utilizados os comandos `df`, `lsblk` e `findmnt` para analisar o armazenamento do sistema.
-
-### 📊 Verificando o uso do disco
 ```bash
+df -h          # espaço total, usado e disponível por filesystem
+lsblk          # discos, partições e pontos de montagem
+findmnt /      # onde a partição raiz está montada e com qual filesystem
+```
+
+A partição principal estava montada em `/` com o filesystem `ext4`.
+
+![Disco e filesystems](screenshots/exercicio-01-disco-e-filesystems.png)
+
+### 2. Descobrir o que consome espaço
+
+Investigação de cima para baixo, aprofundando a cada passo:
+
+```bash
+sudo du -sh /* 2>/dev/null        # maiores diretórios da raiz
+du -sh ~/* 2>/dev/null            # dentro do diretório pessoal
+du -sh ~/Downloads/* 2>/dev/null  # dentro de Downloads
+```
+
+| Nível | O que encontrei |
+|-------|-----------------|
+| `/` | maior uso em `/home`, `/snap` e `/var` |
+| `~` | `Downloads` com cerca de **7,9 GB** |
+| `~/Downloads` | uma ISO do Windows 11 com cerca de **7,9 GB** |
+
+![Investigação do uso do disco](screenshots/exercicio-02-investigacao-uso-disco.png)
+
+### 3. Limpeza controlada
+
+Com a ISO confirmada como desnecessária, o arquivo foi removido e o espaço verificado de novo:
+
+```bash
+rm ~/Downloads/<arquivo>.iso
 df -h
-
 ```
 
-O comando `df -h` permite visualizar o espaço total, utilizado e disponível nos sistemas de arquivos.
+| | Uso | Usado |
+|---|:---:|:---:|
+| Antes | 7% | ~29 GB |
+| Depois | 5% | ~21 GB |
 
-### 💽 Visualizando discos e partições
+A remoção liberou aproximadamente **8 GB**.
 
-```bash
-lsblk
-
-```
-
-O comando `lsblk` permite visualizar os discos, partições e seus pontos de montagem.
-
-### 📍 Verificando o ponto de montagem
-
-```bash
-findmnt /
-
-```
-
-O comando `findmnt /` foi utilizado para verificar onde a partição raiz está montada. A partição principal do sistema estava montada em `/` utilizando o filesystem `ext4`.
-
-### 🖼️ Evidência
-
----
-
-## 2. 🕵️‍♂️ Investigação do Uso de Espaço
-
-Depois de verificar o estado geral do disco, foi realizada uma investigação para descobrir quais diretórios estavam ocupando mais espaço.
-
-O primeiro comando utilizado foi:
-
-```bash
-sudo du -sh /* 2>/dev/null
-
-```
-
-A análise mostrou maior utilização em diretórios como:
-
-* 📂 `/home`
-* 📂 `/snap`
-* 📂 `/var`
-
-A investigação foi então aprofundada.
-
-### 👤 Investigando o diretório pessoal
-
-```bash
-du -sh ~/* 2>/dev/null
-
-```
-
-Foi identificado que o diretório `Downloads` utilizava aproximadamente **7,9 GB**.
-
-### 📥 Investigando Downloads
-
-```bash
-du -sh ~/Downloads/* 2>/dev/null
-
-```
-
-Foi identificado um arquivo ISO do Windows utilizando aproximadamente **7,9 GB**:
-
-*  `Win11_25H2_Portuguese_x64_v2.iso`
-
----
-
-## 3. 🧹 Limpeza Controlada
-
-Após verificar que a ISO não era mais necessária, o arquivo foi removido:
-
-```bash
-rm ~/Downloads/Win11_25H2_Portuguese_x64_v2.iso
-
-```
-
-Depois da remoção, o espaço disponível foi verificado novamente:
-
-```bash
-df -h
-
-```
-
-### 📈 Resultado
-
-* 🔴 **Antes da limpeza:**
-* Uso: **7%**
-* Usado: **~29 GB**
-
-
-* 🟢 **Depois da limpeza:**
-* Uso: **5%**
-* Usado: **~21 GB**
-
-
-
-✨ A remoção liberou aproximadamente **8 GB** de espaço!
-
----
-
-## 4. 📂 Investigação do `/var`
-
-Também foi investigado o diretório `/var` para entender onde o espaço estava sendo utilizado:
+### 4. Investigar o `/var`
 
 ```bash
 sudo du -sh /var/* 2>/dev/null
-
-```
-
-A análise mostrou que `/var/lib` era um dos diretórios que mais utilizavam espaço.
-A investigação continuou:
-
-```bash
 sudo du -sh /var/lib/* 2>/dev/null
-
 ```
 
-Foi identificado o diretório `/var/lib/snapd` como um dos principais consumidores de espaço.
+`/var/lib` era um dos que mais usavam espaço e, dentro dele, `/var/lib/snapd` era um dos principais consumidores.
 
----
-
-## 5. 🧩 Investigação do Snap
-
-O armazenamento relacionado ao Snap foi analisado com:
+### 5. Investigar o Snap
 
 ```bash
 sudo du -sh /var/lib/snapd/* 2>/dev/null
 sudo du -sh /snap/* 2>/dev/null
-
-```
-
-Durante a investigação, foi identificado que o Snap mantinha algumas revisões antigas dos pacotes instalados. Para verificar as versões instaladas e antigas:
-
-```bash
 snap list --all
-
 ```
 
-As revisões antigas apareciam com a indicação `disabled`. Essas revisões foram removidas utilizando o próprio Snap:
+O Snap mantinha **revisões antigas** dos pacotes, marcadas como `disabled` no `snap list --all`. Elas foram removidas pelo próprio Snap, e não apagando arquivos à mão:
 
 ```bash
 sudo snap remove <nome> --revision=<revisão>
-
+snap list --all     # confirma que não há mais revisões disabled
 ```
 
-Após a limpeza, uma nova verificação foi realizada:
+## 🔍 Troubleshooting
 
-```bash
-snap list --all
+Fluxo usado, baseado em evidências:
 
-```
+| Etapa | Comando | O que descobri |
+|-------|---------|----------------|
+| 1. Visão geral | `df -h` | quanto espaço estava em uso |
+| 2. Maiores diretórios | `sudo du -sh /*` | `/home`, `/snap` e `/var` |
+| 3. Aprofundar | `du -sh ~/*` e `du -sh ~/Downloads/*` | uma ISO de 7,9 GB |
+| 4. Agir | `rm` no arquivo | limpeza controlada |
+| 5. Confirmar | `df -h` | 7% → 5% de uso |
 
-As revisões antigas `disabled` foram removidas com sucesso.
+O Snap foi investigado em paralelo (passos 4 e 5 acima), seguindo o mesmo princípio: **identificar, agir e confirmar**.
 
-### 🖼️ Evidência
+## 🧠 Aprendizados
 
----
-
-## 6. 🔄 Abordagem de Troubleshooting
-
-A investigação seguiu uma sequência lógica baseada em evidências:
-
-```text
-df -h
-  ↓ (Verificação do espaço utilizado)
-sudo du -sh /*
-  ↓ (Identificação dos maiores diretórios)
-du -sh ~/*
-  ↓ (Identificação de Downloads)
-du -sh ~/Downloads/*
-  ↓ (Identificação da ISO de 7,9 GB)
-rm ~/Downloads/Win11_25H2_Portuguese_x64_v2.iso
-  ↓ (Remoção controlada)
-df -h
-  ↓ (Verificação do resultado)
-
-```
-
-Também foi realizada uma investigação independente do armazenamento utilizado pelo Snap.
-
----
-
-## 7. 💻 Comandos Utilizados
-
-```bash
-df -h
-lsblk
-findmnt /
-sudo du -sh /*
-du -sh ~/*
-du -sh ~/Downloads/*
-sudo du -sh /var/*
-sudo du -sh /var/lib/*
-sudo du -sh /var/lib/snapd/*
-sudo du -sh /snap/*
-snap list --all
-sudo snap remove <nome> --revision=<revisão>
-
-```
-
----
-
-## 8. 🧠 O Que Aprendi
-
-* Como verificar o espaço utilizado e disponível em um filesystem.
-* Como visualizar discos e partições.
-* Como identificar pontos de montagem.
-* Como investigar o consumo de espaço utilizando `du`.
-* Como localizar arquivos grandes.
-* Como realizar uma limpeza de forma controlada.
-* Como investigar o armazenamento utilizado pelo Snap.
-* Como identificar revisões antigas de pacotes.
-* A importância de não apagar manualmente arquivos de diretórios gerenciados pelo sistema.
-* Como utilizar uma sequência de diagnóstico para resolver problemas de armazenamento.
-
----
-
-### 📸 9. Evidências
-
-As evidências deste laboratório estão disponíveis no diretório `screenshots/`.
-
-#### 🖼️ Exercício 01 — Disco e Filesystems
-
-![Exercício 01 - Disco e Filesystems](screenshots/exercicio-01-disco-e-filesystems.png)
-
-#### 🖼️ Exercício 02 — Investigação do uso do disco
-
-![Exercício 02 - Investigação do uso do disco](screenshots/exercicio-02-investigacao-uso-disco.png)
-```
-
-```
+- `df` mostra o uso por filesystem e `du` mostra o uso por diretório. Um responde "onde está cheio" e o outro "quem encheu".
+- A investigação funciona de cima para baixo: raiz → diretório → subdiretório → arquivo.
+- Diretórios gerenciados pelo sistema (como `/var/lib/snapd`) devem ser limpos com a ferramenta do próprio gerenciador, nunca com `rm` manual.
+- Antes de apagar, confirmar que o arquivo realmente não é mais necessário.
