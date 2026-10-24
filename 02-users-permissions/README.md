@@ -1,152 +1,114 @@
 # 👤 Users & Permissions
 
-Segundo laboratório prático da minha preparação para atuar com **DevOps**.
-
-Neste laboratório pratiquei a criação e gerenciamento de usuários, grupos e permissões no Linux, simulando um ambiente onde diferentes usuários possuem diferentes níveis de acesso.
-
----
+Laboratório prático de gerenciamento de **usuários, grupos e permissões no Linux**, simulando um ambiente em que diferentes pessoas têm diferentes níveis de acesso a um mesmo recurso.
 
 ## 🎯 Objetivo
 
-Praticar:
+Entender **por que um usuário consegue ou não acessar determinado recurso**, praticando:
 
-- criação e gerenciamento de usuários;
-- criação e gerenciamento de grupos;
-- permissões de arquivos;
-- proprietário e grupo;
-- `whoami`;
-- `id`;
-- `groups`;
-- `chmod`;
-- `chown`;
-- troubleshooting de acesso.
+- criação de usuários e grupos (`useradd`, `groupadd`, `usermod`)
+- proprietário e grupo de arquivos (`chown`)
+- permissões de leitura, escrita e execução (`chmod`)
+- verificação de identidade e acesso (`whoami`, `id`, `groups`, `getent`)
+- troubleshooting de `Permission denied`
 
-O objetivo foi entender **por que um usuário consegue ou não acessar determinado recurso**.
+## 🧰 Ambiente
 
----
+- Distribuição: <!-- ex: Ubuntu 24.04 LTS -->
+- Acesso: usuário com `sudo`
 
-## 👥 Usuários e grupos
+## 🛠️ Passo a passo
 
-Criei três usuários para o laboratório:
-
-```text
-maria
-joao
-carlos
-```
-
-Também criei o grupo:
-
-```text
-leitores
-```
-
-e associei o usuário `joao` ao grupo.
-
-Para verificar as informações dos usuários e grupos, utilizei:
+### 1. Criar usuários e grupo
 
 ```bash
-whoami
-id
-groups
-getent passwd
+sudo useradd -m maria
+sudo useradd -m joao
+sudo useradd -m carlos
+sudo groupadd leitores
+sudo usermod -aG leitores joao
 ```
 
----
-
-## 🔐 Permissões
-
-Utilizei:
+Verificação:
 
 ```bash
-ls -l
-chmod
-chown
+id joao
+getent group leitores
 ```
 
-para analisar e modificar permissões e proprietários.
-
-A prática ajudou a entender a relação entre:
-
-```text
-Proprietário
-Grupo
-Outros
-```
-
-e as permissões:
-
-```text
-Leitura
-Escrita
-Execução
-```
-
-Também criei um arquivo de teste em `/srv/empresa/relatorio.txt` e alterei seu proprietário, grupo e permissões para simular diferentes níveis de acesso.
-
----
-
-## 🧪 Testes e erros
-
-Durante os testes, ocorreram alguns problemas de autenticação e acesso.
-
-Entre eles:
-
-```text
-Erros de validação de senha
-Permission denied
-```
-
-Também encontrei situações em que um usuário não conseguia acessar ou modificar um arquivo devido às permissões configuradas.
-
-Para investigar os problemas, utilizei:
+### 2. Criar o recurso de teste
 
 ```bash
-whoami
-id
-groups
-ls -l
-sudo
+sudo mkdir -p /srv/empresa
+sudo touch /srv/empresa/relatorio.txt
+sudo chown maria:leitores /srv/empresa/relatorio.txt
+sudo chmod 640 /srv/empresa/relatorio.txt
+ls -l /srv/empresa/relatorio.txt
 ```
 
-Esses erros foram importantes para entender que uma mensagem como `Permission denied` pode estar relacionada ao usuário, grupo, proprietário ou às permissões configuradas.
+Resultado esperado:
 
----
+```text
+-rw-r----- 1 maria leitores 0 ... relatorio.txt
+```
+
+### 3. Testar o acesso de cada usuário
+
+| Usuário | Relação com o arquivo | Leitura | Escrita |
+|---------|-----------------------|:-------:|:-------:|
+| `maria` | proprietária          | ✅      | ✅      |
+| `joao`  | membro do grupo `leitores` | ✅ | ❌      |
+| `carlos`| outros                | ❌      | ❌      |
+
+```bash
+sudo -u joao cat /srv/empresa/relatorio.txt      # funciona
+sudo -u joao sh -c 'echo teste >> /srv/empresa/relatorio.txt'   # Permission denied
+sudo -u carlos cat /srv/empresa/relatorio.txt    # Permission denied
+```
+
+## 🔍 Troubleshooting
+
+Quando aparece `Permission denied`, investigo nesta ordem:
+
+```bash
+whoami                      # quem eu sou?
+id                          # a quais grupos pertenço?
+ls -l <arquivo>             # quem é o dono, qual o grupo e quais as permissões?
+ls -ld <diretório>          # tenho permissão de execução (x) no diretório?
+```
+
+| Erro | Causa | Solução |
+|------|-------|---------|
+| `Permission denied` ao ler | usuário não é dono nem está no grupo | adicionar ao grupo (`usermod -aG`) ou ajustar o `chmod` |
+| `Permission denied` ao escrever | permissão de escrita (`w`) ausente para o usuário/grupo | ajustar `chmod` ou `chown` conforme a necessidade |
+| Senha rejeitada ao definir com `passwd` | senha não atende à política de complexidade | usar senha mais forte |
 
 ## 🧹 Limpeza do ambiente
 
-Após concluir os testes, verifiquei os diretórios dos usuários de laboratório e removi as contas criadas exclusivamente para a prática.
+```bash
+sudo userdel -r maria
+sudo userdel -r joao
+sudo userdel -r carlos
+sudo groupdel leitores
+sudo rm -rf /srv/empresa
+```
 
-Também removi o grupo utilizado nos testes.
+Verificação:
 
-Depois de reiniciar o sistema, confirmei que os usuários do laboratório não apareciam mais na tela de login.
-
----
+```bash
+getent passwd maria joao carlos   # sem saída = usuários removidos
+getent group leitores             # sem saída = grupo removido
+```
 
 ## 📸 Evidências
 
-A execução do laboratório foi registrada no terminal, incluindo:
-
-- criação e verificação dos usuários;
-- criação e associação de grupos;
-- configuração de proprietário e permissões;
-- testes de acesso;
-- situações de `Permission denied`.
-
 ![Execução do laboratório](screenshots/exercicio-02-users-permissions.png)
-
-A limpeza do ambiente também foi verificada após a remoção das contas e do grupo.
 
 ![Limpeza do ambiente](screenshots/limpeza-ambiente.png)
 
----
+## 🧠 Aprendizados
 
-## 🧠 O que aprendi
-
-Este laboratório ajudou a entender na prática como o Linux controla o acesso aos seus recursos.
-
-Mais importante do que decorar comandos, comecei a desenvolver o hábito de **investigar a causa de um problema antes de tentar corrigi-lo**.
-
----
-
-
+- Permissão no Linux é avaliada em camadas: **dono → grupo → outros**.
+- Adicionar um usuário a um grupo só vale em novas sessões (`id` mostra o estado real).
+- Para acessar um arquivo, o usuário também precisa de `x` em todos os diretórios do caminho.
+- Diante de um erro, investigar a causa (`id`, `ls -l`) antes de sair alterando permissões.
