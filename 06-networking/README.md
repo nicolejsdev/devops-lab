@@ -1,65 +1,110 @@
-# 🌐 06 - Networking
+# 🌐 Networking
+
+Laboratório prático de **fundamentos de redes no Linux**: identificação do hostname, das interfaces de rede, do endereço IP, da rede local, do gateway padrão e das rotas do sistema.
 
 ## 🎯 Objetivo
 
-Compreender os fundamentos de redes no Linux, identificando interfaces de rede, endereços IP, gateway e rotas utilizadas pelo sistema.
+Identificar como a máquina está conectada à rede, praticando:
 
-## 🧪 Exercício 01 - Identificação da rede
+- identificação do nome da máquina (`hostname`)
+- listagem de interfaces e endereços IP (`ip addr`)
+- leitura da tabela de rotas e do gateway padrão (`ip route`)
+- diferenciação entre interface física, loopback e interface virtual
 
-### 💻 Comandos utilizados
+## 🧰 Ambiente
+
+- Distribuição: <!-- ex: Ubuntu 24.04 LTS -->
+- Conexão: Wi-Fi
+- Docker instalado
+
+## 🛠️ Passo a passo
+
+### 1. Identificar o hostname
 
 ```bash
 hostname
-ip addr
-ip route
-🔎 Resultados encontrados
-🖥️ Hostname:
+```
 
+```text
 ubuntu
 ```
 
-📡 Interface de rede utilizada:
-```
-wlp4s0
-A interface wlp4s0 corresponde à conexão Wi-Fi e está ativa.
-```
+### 2. Listar interfaces e endereços IP
 
-🌍 Endereço IPv4:
-```
-10.16.210.203/24
+```bash
+ip addr
 ```
 
-🚪 Gateway padrão:
+Trecho relevante da saída:
+
+```text
+wlp4s0: ... state UP
+    inet 10.16.210.203/24 ...
 ```
-10.16.210.52
+
+### 3. Consultar as rotas e o gateway
+
+```bash
+ip route
 ```
-🏠 Rede local:
+
+Trecho relevante da saída:
+
+```text
+default via 10.16.210.52 dev wlp4s0 ...
+10.16.210.0/24 dev wlp4s0 ...
 ```
-10.16.210.0/24
-```
-🔌 Outras interfaces identificadas
-Durante a análise também foram encontradas:
 
-🔄``` lo``` — interface de loopback, utilizada para comunicação interna da própria máquina.
-🔌 ```enp3s0``` — interface Ethernet, atualmente sem conexão.
-🐳 ```docker0``` — interface de rede virtual criada pelo Docker.
-A interface ```docker0``` possui o endereço:
-```172.17.0.1/16```
+## 🔎 Resultados
 
-📚 O que aprendi
-Neste exercício, pratiquei a identificação das principais informações de rede de um sistema Linux.
-Aprendi a utilizar os comandos ```hostname```, ```ip addr``` e ```ip route``` para identificar:
+### Identificação da máquina
 
-o nome do computador;
-as interfaces de rede disponíveis;
-o endereço IP da máquina;
-a rede local;
-o gateway padrão;
-as rotas utilizadas pelo sistema.
-Também pude observar a diferença entre uma interface física de rede, a interface de loopback e uma interface virtual criada pelo Docker.
+| Item | Valor |
+|------|-------|
+| Hostname | `ubuntu` |
+| Interface em uso | `wlp4s0` (Wi-Fi, ativa) |
+| Endereço IPv4 | `10.16.210.203/24` |
+| Rede local | `10.16.210.0/24` |
+| Gateway padrão | `10.16.210.52` |
 
-### 📸 Evidência
+### Interfaces encontradas
 
-**Screenshot:** `screenshots/exercicio-01-identificacao-da-rede.png`
+| Interface | Tipo | Situação |
+|-----------|------|----------|
+| `wlp4s0` | Wi-Fi (física) | ativa, com IP `10.16.210.203/24` |
+| `enp3s0` | Ethernet (física) | sem conexão |
+| `lo` | loopback | comunicação interna da própria máquina |
+| `docker0` | virtual (criada pelo Docker) | IP `172.17.0.1/16` |
 
-![Exercício 01 - Identificação da rede](screenshots/exercicio-01-identificacao-da-rede.png)
+## 🧠 Como interpretar
+
+| Conceito | No laboratório |
+|----------|----------------|
+| **Endereço IP com máscara (`/24`)** | `10.16.210.203/24` indica que os 24 primeiros bits identificam a rede (`10.16.210.0`) e o restante identifica a máquina |
+| **Rede local** | `10.16.210.0/24`: máquinas nesse bloco conversam diretamente, sem passar pelo gateway |
+| **Gateway padrão** | `10.16.210.52`: para onde vai todo tráfego destinado a fora da rede local (rota `default`) |
+| **Loopback (`lo`)** | interface interna, usada pela máquina para falar consigo mesma |
+| **`docker0`** | bridge virtual criada pelo Docker, em uma rede própria (`172.17.0.0/16`), separada da rede Wi-Fi |
+
+## 🔍 Troubleshooting
+
+Perguntas que este laboratório já permite responder:
+
+| Pergunta | Comando | Onde olhar |
+|----------|---------|-----------|
+| Qual interface está ativa? | `ip addr` | `state UP` |
+| Qual é o meu IP? | `ip addr` | linha `inet` da interface ativa |
+| Por onde sai o tráfego para fora da rede? | `ip route` | linha `default via` |
+| Quais redes estão diretamente conectadas? | `ip route` | linhas com `dev <interface>` sem `via` |
+
+## 📸 Evidência
+
+![Identificação da rede](screenshots/exercicio-01-identificacao-da-rede.png)
+
+## 🧠 Aprendizados
+
+- `ip addr` mostra **quem eu sou** na rede (interfaces e IPs). `ip route` mostra **para onde o tráfego vai** (rotas e gateway).
+- Uma máquina pode ter várias interfaces ao mesmo tempo, com situações diferentes (Wi-Fi ativa, Ethernet desconectada).
+- Existem interfaces físicas, a de loopback e interfaces virtuais, como a do Docker.
+- O `/24` define o tamanho da rede local, e o gateway é a saída para fora dela.
+
