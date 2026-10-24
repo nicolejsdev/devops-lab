@@ -1,28 +1,41 @@
 # 🐧 Linux Fundamentals
 
-Laboratório prático desenvolvido para consolidar os fundamentos do Linux e da linha de comando (CLI).
+Laboratório prático de Linux desenvolvido para consolidar os fundamentos da linha de comando (CLI), a navegação pelo filesystem e as operações básicas com arquivos e diretórios.
 
-## 🎯 Objetivo
+A proposta foi aprender fazendo: executar comandos, observar os resultados, investigar erros e entender como cada operação funciona no ambiente Linux.
 
-Desenvolver familiaridade com o ambiente Linux por meio da prática, entendendo não apenas quais comandos utilizar, mas também o que acontece no filesystem a cada operação.
+## 🎯 Objetivos
 
-## 🧪 Conteúdos praticados
+- Praticar a navegação pelo filesystem Linux.
+- Compreender a diferença entre caminhos absolutos e relativos.
+- Criar e organizar arquivos e diretórios.
+- Realizar operações de cópia, movimentação e remoção.
+- Localizar arquivos utilizando o `find`.
+- Interpretar mensagens de erro e investigar possíveis causas.
 
-- Navegação pelo filesystem
-- Caminhos absolutos e relativos
-- Criação de diretórios e arquivos
-- Cópia, movimentação e remoção de arquivos
-- Localização de arquivos e diretórios
-- Visualização da estrutura de diretórios
-- Uso da linha de comando (CLI)
+## 🛠️ Tecnologias e comandos
 
-## 🛠️ Comandos utilizados
+**Ambiente:** Linux Ubuntu · Terminal Bash
 
-`pwd` · `ls` · `cd` · `mkdir` · `touch` · `cp` · `mv` · `rm` · `find` · `tree`
+| Comando | Aplicação prática |
+|---|---|
+| `pwd` | Verificar o diretório atual |
+| `ls` | Listar arquivos e diretórios |
+| `cd` | Navegar pelo filesystem |
+| `mkdir` | Criar diretórios |
+| `touch` | Criar arquivos |
+| `cp` | Copiar arquivos e diretórios |
+| `mv` | Mover ou renomear arquivos e diretórios |
+| `rm` | Remover arquivos e diretórios |
+| `find` | Localizar arquivos e diretórios |
+| `tree` | Visualizar a estrutura em formato de árvore |
+| `cat` | Exibir o conteúdo de arquivos de texto |
 
-## 🧩 Exercício 01 — Navegação e filesystem
+## 🧪 Exercício 01 — Navegação e organização do filesystem
 
-Criar e organizar a seguinte estrutura:
+O primeiro exercício consistiu em criar uma estrutura de diretórios, adicionar arquivos de log e praticar operações comuns de gerenciamento de arquivos.
+
+### Estrutura do exercício
 
 ```text
 lab-linux/
@@ -31,46 +44,11 @@ lab-linux/
 ├── backups/
 ├── config/
 └── reports/
-Além da criação dos diretórios, foram criados arquivos de log e realizadas operações de cópia, movimentação e localização de arquivos.
+```
 
----
+Durante a prática, foram criados arquivos, realizadas cópias e movimentações e utilizadas ferramentas de busca para verificar a organização do ambiente.
 
-## 🔨 Atividades realizadas
-
-Durante o exercício foram realizadas as seguintes atividades:
-
-1. Verificação do diretório atual utilizando `pwd`
-2. Navegação pelo filesystem utilizando `cd`
-3. Listagem de arquivos e diretórios utilizando `ls`
-4. Criação dos diretórios utilizando `mkdir`
-5. Criação dos arquivos utilizando `touch`
-6. Cópia de arquivos utilizando `cp`
-7. Movimentação de arquivos utilizando `mv`
-8. Localização de arquivos utilizando `find`
-9. Visualização da estrutura final utilizando `tree`
-
----
-
-## 🛠️ Comandos utilizados
-
-| Comando | Função |
-|---|---|
-| `pwd` | Exibe o diretório atual |
-| `ls` | Lista arquivos e diretórios |
-| `cd` | Navega entre diretórios |
-| `mkdir` | Cria diretórios |
-| `touch` | Cria arquivos |
-| `cp` | Copia arquivos e diretórios |
-| `mv` | Move ou renomeia arquivos e diretórios |
-| `rm` | Remove arquivos e diretórios |
-| `find` | Localiza arquivos e diretórios |
-| `tree` | Exibe a estrutura de diretórios em formato de árvore |
-
----
-
-# 📂 Estrutura criada
-
-A estrutura utilizada no laboratório foi organizada da seguinte forma:
+### Estrutura final do laboratório
 
 ```text
 01-linux-fundamentals/
@@ -87,241 +65,175 @@ A estrutura utilizada no laboratório foi organizada da seguinte forma:
 └── scripts/
 ```
 
-### Organização dos diretórios
+A organização separa os arquivos por finalidade:
 
-- `logs/` → armazenamento dos arquivos de log
-- `scripts/` → diretório destinado a scripts
-- `backups/` → armazenamento de cópias de arquivos
-- `config/` → diretório destinado a arquivos de configuração
-- `reports/` → armazenamento de relatórios
-- `screenshots/` → evidências da execução dos exercícios
+- `logs/` — arquivos de log.
+- `scripts/` — espaço destinado a scripts.
+- `backups/` — cópias de arquivos.
+- `config/` — arquivos de configuração.
+- `reports/` — relatórios e arquivos relacionados.
+- `screenshots/` — evidências da execução prática.
 
-Durante o exercício, o arquivo `app.log` foi copiado para `backups/` e o arquivo `error.log` foi movido para `reports/`.
+Durante o exercício, o arquivo `app.log` foi copiado para `backups/`, e o arquivo `error.log` foi organizado em `reports/`.
 
----
+## 📍 Caminhos absolutos e relativos
 
-# 📍 Caminhos absolutos e relativos
+Outro ponto importante foi compreender como o diretório atual influencia a execução dos comandos.
 
-Um dos conceitos praticados durante o laboratório foi a diferença entre caminhos absolutos e relativos.
+### Caminho absoluto
 
-## Caminho absoluto
+Um caminho absoluto identifica a localização de um recurso a partir da raiz do sistema (`/`).
 
-Um caminho absoluto representa a localização completa de um arquivo ou diretório a partir da raiz do sistema `/`.
-
-Exemplo:
-
-```text
+```bash
 /home/nicole/01-linux-fundamentals
 ```
 
-O caminho absoluto não depende do diretório atual para determinar a localização do recurso.
+Esse caminho não depende do diretório atual para identificar o destino.
 
----
+### Caminho relativo
 
-## Caminho relativo
+Um caminho relativo utiliza o diretório atual como referência.
 
-Um caminho relativo utiliza o diretório atual como ponto de referência.
-
-Exemplo:
-
-```text
+```bash
 ../backups
 ```
 
-Nesse caso, `..` representa o diretório pai do diretório atual.
+Nesse exemplo, `..` representa o diretório pai.
 
 Outro exemplo:
 
-```text
+```bash
 ./logs
 ```
 
 Nesse caso, `.` representa o diretório atual.
 
-Durante o exercício, os caminhos relativos foram utilizados para realizar operações de cópia e movimentação entre os diretórios.
+Esses conceitos foram utilizados nas operações com arquivos e diretórios, ajudando a entender por que um mesmo caminho pode funcionar em um contexto e falhar em outro.
 
----
+## 🔎 Localização de arquivos
 
-# 🔎 Localização de arquivos
-
-O comando `find` foi utilizado para localizar arquivos dentro da estrutura criada.
-
-Exemplo:
+O comando `find` foi utilizado para procurar arquivos com a extensão `.log`.
 
 ```bash
 find .. -name "*.log"
 ```
 
-Esse comando permite procurar arquivos com a extensão `.log` a partir do diretório indicado.
+O comando procura arquivos e diretórios com nomes correspondentes ao padrão informado, a partir do diretório indicado. Nesse caso, a busca começa em `..`, ou seja, no diretório pai.
 
-A utilização do `find` ajudou a compreender como localizar arquivos sem precisar navegar manualmente por todos os diretórios.
+Essa prática ajudou a compreender como localizar arquivos sem precisar percorrer manualmente toda a estrutura.
 
----
+## 🌳 Visualização da estrutura
 
-# 🌳 Visualização da estrutura
-
-O comando `tree` foi utilizado para visualizar a organização dos diretórios e arquivos em formato de árvore.
-
-Exemplo:
+Para conferir a organização final, utilizei:
 
 ```bash
 tree
 ```
 
-O resultado permitiu verificar visualmente se a estrutura criada estava organizada conforme o esperado.
+A visualização em árvore facilitou a identificação dos diretórios e arquivos existentes e ajudou a verificar se a estrutura estava organizada conforme o planejado.
 
----
+## 🐛 Erros encontrados e troubleshooting
 
-# 🐛 Erros encontrados durante a prática
+Durante a execução dos exercícios, alguns comandos não produziram o resultado esperado. Em vez de simplesmente repetir as instruções, investiguei o contexto da execução e procurei entender o motivo de cada erro.
 
-Durante a realização do laboratório, alguns erros aconteceram.
+### 1. Diretório não encontrado
 
-Esses erros fizeram parte do processo de aprendizado e ajudaram a compreender melhor como o terminal e o Bash interpretam os comandos.
-
----
-
-## 1. Diretório não encontrado
-
-Em determinado momento foi utilizado:
+Comando utilizado:
 
 ```bash
 cd lab-linux/logs
 ```
 
-O terminal retornou um erro informando que o diretório não existia.
+O terminal retornou uma mensagem informando que o diretório não foi encontrado.
 
-O problema aconteceu porque o comando foi executado a partir de um diretório diferente daquele considerado no caminho informado.
+**O que aconteceu?**
 
-### Aprendizado
+O caminho relativo foi interpretado a partir do diretório atual, e a estrutura informada não correspondia à localização em que o comando foi executado.
 
-Foi possível perceber que o `cd` interpreta o caminho relativo a partir do diretório atual.
-
-Por isso, antes de navegar ou executar operações em arquivos, é importante verificar o diretório atual utilizando:
+**Como investigar?**
 
 ```bash
 pwd
-```
-
-e visualizar o conteúdo disponível com:
-
-```bash
 ls
 ```
 
----
+O `pwd` permite conferir a localização atual, enquanto o `ls` ajuda a verificar os arquivos e diretórios disponíveis.
 
-## 2. Tentativa de executar um diretório
+**Aprendizado:** antes de utilizar um caminho relativo, é importante entender de onde o comando está sendo executado.
 
-Durante a prática, foi digitado:
+### 2. Tentativa de executar um diretório
+
+Comando digitado:
 
 ```bash
 logs/
 ```
 
-O Bash interpretou `logs/` como algo que deveria ser executado, e não como uma instrução de navegação.
+O Bash tentou interpretar a entrada como um comando a ser executado, em vez de utilizá-la para navegar até o diretório.
 
-### Aprendizado
-
-Para entrar em um diretório é necessário utilizar o comando:
+Para entrar no diretório, o comando correto é:
 
 ```bash
 cd logs/
 ```
 
-Isso ajudou a compreender a diferença entre informar um caminho e executar um comando.
+**Aprendizado:** informar um caminho não é o mesmo que executar uma operação. O comando utilizado determina o que o shell tentará fazer.
 
----
+### 3. Tentativa de executar um arquivo de log
 
-## 3. Tentativa de executar um arquivo de log
-
-Também ocorreu uma tentativa de utilizar diretamente um caminho como:
+Comando digitado:
 
 ```bash
 ../backups/app.log
 ```
 
-O Bash interpretou o arquivo como um programa que deveria ser executado.
-
-Como o arquivo não possuía permissão de execução, foi retornado:
+O terminal retornou:
 
 ```text
 Permission denied
 ```
 
-### Aprendizado
+O caminho foi interpretado como uma tentativa de execução do arquivo. Como se tratava de um arquivo de log, e não de um programa destinado à execução, essa não era a operação desejada.
 
-Um caminho de arquivo sozinho não significa abrir ou visualizar o arquivo.
-
-Para trabalhar com seu conteúdo, é necessário utilizar um comando apropriado, por exemplo:
+Para visualizar seu conteúdo, utilizei:
 
 ```bash
 cat ../backups/app.log
 ```
 
-Esse erro ajudou a compreender melhor que o shell interpreta o primeiro elemento digitado como um comando ou programa a ser executado.
+**Aprendizado:** arquivos podem ter finalidades diferentes. Para trabalhar com seu conteúdo, é necessário utilizar um comando apropriado à operação desejada.
 
----
+## 🔍 Como abordei os erros
 
-# 🔍 Investigação e resolução
+Essas situações ajudaram a desenvolver o hábito de investigar antes de executar novamente um comando.
 
-Os erros encontrados durante o exercício fizeram parte do processo de aprendizado.
+Ao encontrar um problema, procurei verificar:
 
-Ao invés de apenas repetir comandos, foi necessário analisar:
+- Qual era o diretório atual?
+- O caminho informado estava correto?
+- O arquivo ou diretório existia naquele local?
+- O comando correspondia à operação desejada?
+- O que a mensagem de erro indicava?
 
-- Qual era o diretório atual
-- Qual caminho estava sendo utilizado
-- Se o arquivo ou diretório realmente existia
-- Como o Bash estava interpretando o comando
-- Qual comando deveria ser utilizado para realizar a operação desejada
+Essa abordagem faz parte do troubleshooting: observar o comportamento do sistema, levantar possíveis causas e testar uma solução.
 
-Essa prática ajudou a desenvolver uma abordagem mais voltada para **investigação e troubleshooting**, que é fundamental em ambientes Linux e DevOps.
+## 📸 Evidência da execução
 
----
+A imagem abaixo registra a prática realizada no terminal e a estrutura de arquivos criada durante o exercício.
 
-# 📸 Evidência
+![Execução do exercício 01 — Navegação e filesystem](screenshots/exercicio-01-filesystem.png)
 
-A evidência da execução deste laboratório está disponível na pasta:
+## 🧠 Principais aprendizados
 
-```text
-screenshots/
-```
+Ao concluir este laboratório, pratiquei:
 
-Arquivo:
+- Navegação pelo filesystem Linux.
+- Utilização de comandos básicos no terminal.
+- Manipulação e organização de arquivos e diretórios.
+- Diferenças entre caminhos absolutos e relativos.
+- Localização de arquivos com `find`.
+- Verificação da estrutura com `tree`.
+- Interpretação de mensagens de erro.
+- Investigação de problemas relacionados a caminhos e execução de comandos.
 
-```text
-screenshots/exercicio-01-filesystem.png
-```
-
-A imagem registra a execução prática realizada no terminal e a estrutura criada durante o exercício.
-
-![Execução do exercício 01](screenshots/exercicio-01-filesystem.png)
-
----
-
-# 🧠 O que aprendi
-
-Ao finalizar este laboratório, consolidei conhecimentos sobre:
-
-- Navegação pelo filesystem
-- Utilização da linha de comando
-- Caminhos absolutos e relativos
-- Criação de arquivos e diretórios
-- Cópia e movimentação de arquivos
-- Localização de arquivos com `find`
-- Visualização da estrutura com `tree`
-- Interpretação de mensagens de erro
-- Diferença entre navegar até um arquivo e tentar executá-lo
-- Importância de verificar o diretório atual antes de executar operações
-
-O principal aprendizado foi perceber que trabalhar com Linux não envolve apenas memorizar comandos.
-
-É necessário entender **o contexto da operação**, observar o resultado dos comandos e interpretar as mensagens retornadas pelo sistema.
-
-Quando um comando apresenta um erro, a mensagem exibida pelo terminal pode fornecer informações importantes para identificar a causa do problema e encontrar uma solução.
-
-Essa forma de pensar será importante nos próximos estudos de Linux, Redes e posteriormente em atividades de troubleshooting dentro de ambientes DevOps.
-
-
-- Controle de acesso a arquivos e diretórios
-
-O objetivo é continuar evoluindo a partir dos fundamentos do Linux e avançar gradualmente para conceitos utilizados no dia a dia de ambientes DevOps.
+O principal aprendizado foi perceber que trabalhar com Linux vai além de memorizar comandos. É preciso entender o contexto em que eles são executados, observar os resultados e investigar quando algo não funciona como esperado.
